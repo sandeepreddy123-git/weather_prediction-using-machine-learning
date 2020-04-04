@@ -5,53 +5,43 @@ from sklearn.metrics import mean_squared_error,r2_score,mean_absolute_error
 import matplotlib.pyplot as plt
 import seaborn as sb
 from sklearn import preprocessing
-data = pd.read_csv("C:\\Users\\sande\\Downloads\\rainfall-in-india\\rainfall in india 1901-2015.csv")
+infor = pd.read_csv("C:\\Users\\sande\\Downloads\\rainfall-in-india\\rainfall in india 1901-2015.csv")
 print("Data heads:")
-print(data.head())
-print("the 0's or null values in the dataset.")
-print(data.isnull().sum())
+print(infor.head())
 print("mean of the particular column is filled to the column conataining null vlaues")
-data=data.fillna(np.mean(data))
+infor=infor.fillna(np.mean(data))
 print("mean of data:")
-print(np.mean(data))
-print("after processing the data is changed into")
-print(data.isnull().sum())
-print("\n\shape: ",data.shape)
-print("info:")
-print(data.info())
-print("Group by :")
-data.groupby('SUBDIVISION').size()
-print("co-variance :",data.cov())
-print("co-relation :",data.corr())
-corr_cols=data.corr()['ANNUAL'].sort_values()[::-1]
+print(np.mean(infor))
+print("\n\shape: ",infor.shape)
+corr_cols=infor.corr()['ANNUAL'].sort_values()[::-1]
 print("Index of correlation columns:",corr_cols.index)
 print("scatter plot of annual and january attributes")
-plt.scatter(data.ANNUAL,data.JAN)
+plt.scatter(infor.ANNUAL,infor.JAN)
 print("graphical representation of data ")
-data['JAN'].hist(bins=20)
-data['FEB'].hist(bins=20)
-data['MAR'].hist(bins=20)
-data['APR'].hist(bins=20)
-data['MAY'].hist(bins=20)
-data['JUN'].hist(bins=20)
-data['JUL'].hist(bins=20)
-data['AUG'].hist(bins=20)
-data['SEP'].hist(bins=20)
-data['OCT'].hist(bins=20)
-data['NOV'].hist(bins=20)
-data['DEC'].hist(bins=20)
+infor['JAN'].hist(bins=20)
+infor['FEB'].hist(bins=20)
+infor['MAR'].hist(bins=20)
+infor['APR'].hist(bins=20)
+infor['MAY'].hist(bins=20)
+infor['JUN'].hist(bins=20)
+infor['JUL'].hist(bins=20)
+infor['AUG'].hist(bins=20)
+infor['SEP'].hist(bins=20)
+infor['OCT'].hist(bins=20)
+infor['NOV'].hist(bins=20)
+infor['DEC'].hist(bins=20)
 print("graphs representating the rainfalls")
-data['ANNUAL'].hist(bins=20)
-d2=data.drop(['SUBDIVISION','YEAR','ANNUAL','Jan-Feb','Mar-May','Jun-Sep','Oct-Dec'],axis=1)
-k=((d2.head().sum()))
-month=list(d2.head())
+infor['ANNUAL'].hist(bins=20)
+data=infor.drop(['SUBDIVISION','YEAR','ANNUAL','Jan-Feb','Mar-May','Jun-Sep','Oct-Dec'],axis=1)
+k=((data.head().sum()))
+month=list(data.head())
 print("Months are: ",month)
 print(k)
-s=0
-for i in d2.sum():
-    s=s+i
+sum=0
+for i in data.sum():
+    sum=sum+i
 print("recorded total amount of rainfall for 12 months",s)
-probability=list(k/s)
+probability=list(k/sum)
 print(probability)
 max_rainfall=max(probability)
 for i in range(len(month)):
@@ -62,15 +52,12 @@ for i in range(len(month)):
     if probability[i]==min_rainfall:
         print("lowest rainfall occurs in",month[i])
 from sklearn import linear_model
-print("___Multiple Linear regression model between annual rainfall and the periodic rainfall___")
-y=data['ANNUAL']
-x=data[['Jan-Feb','Mar-May','Jun-Sep','Oct-Dec']]
+y=infor['ANNUAL']
+x=infor[['Jan-Feb','Mar-May','Jun-Sep','Oct-Dec']]
 train_x,test_x,train_y,test_y=train_test_split(x,y,test_size=0.3,shuffle=False) 
 lm=linear_model.LinearRegression()
 lm.fit(train_x,train_y)
 pred=lm.predict(test_x) 
-print("Mean Squared Error =",mean_squared_error(test_y,pred))
-print("Root Mean Squared Error =",np.sqrt(mean_squared_error(test_y,pred))) 
 print("Mean Absolute Error =",mean_absolute_error(test_y,pred))
 print("r2_score =",r2_score(test_y,pred))
 plt.scatter(pred,test_y) 
