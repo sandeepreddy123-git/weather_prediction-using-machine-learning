@@ -61,3 +61,19 @@ min_rainfall=min(probability)
 for i in range(len(month)):
     if probability[i]==min_rainfall:
         print("lowest rainfall occurs in",month[i])
+from sklearn import linear_model
+print("___Multiple Linear regression model between annual rainfall and the periodic rainfall___")
+y=data['ANNUAL']
+x=data[['Jan-Feb','Mar-May','Jun-Sep','Oct-Dec']]
+train_x,test_x,train_y,test_y=train_test_split(x,y,test_size=0.3,shuffle=False) 
+lm=linear_model.LinearRegression()
+lm.fit(train_x,train_y)
+pred=lm.predict(test_x) 
+print("Mean Squared Error =",mean_squared_error(test_y,pred))
+print("Root Mean Squared Error =",np.sqrt(mean_squared_error(test_y,pred))) 
+print("Mean Absolute Error =",mean_absolute_error(test_y,pred))
+print("r2_score =",r2_score(test_y,pred))
+plt.scatter(pred,test_y) 
+plt.xlabel('TRAIN_X')
+plt.ylabel('TRAIN_Y')
+plt.show()
